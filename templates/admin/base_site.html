@@ -1,0 +1,21 @@
+{% extends "admin/base.html" %}
+{% load admin_static %}
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+
+<h1 id="site-name" ><a href="{% url 'admin:index' %}">
+    <img width="48  " src="{% static "favicon.png" %}">
+{#    {{ site_header|default:'CrediCentro' }}#}
+</a>
+    <i class="fa fa-calendar" style="font-size: 15px"></i>
+    <span style="color: white;font-size: 18px" id="id_current_date"></span>
+    -
+    <span id="id_current_time" style="color: white;font-size: 18px"></span>
+
+</h1>
+
+
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

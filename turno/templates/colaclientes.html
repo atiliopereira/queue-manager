@@ -1,0 +1,91 @@
+{% load static staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cola Clientes</title>
+    <link href="{% static "css/materialicons.css" %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "css/materialize.min.css" %}{% endblock %}" />
+    {% block extrahead %}
+<style>
+td,th{
+ font-size: 30px;
+ font-weight: bold;
+}
+
+
+</style>
+{% endblock %}
+</head>
+<body>
+<audio id="audio" src="{% static 'sounds/demonstrative.ogg' %}" type="audio/ogg" ></audio>
+
+<nav class="orange lighten-1" role="navigation">
+    <div class="right-align nav-wrapper">
+        <img onclick="window.location.href='{% url 'dissoi_login' %}'"  src="{% static "imgs/logo-sticky-menu.png" %}" style="height: inherit; margin-right: 15px" />
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+</nav>
+<div class="row"></div>
+<div class="row">
+    <div class="col s5 m5 l5" style="border-right: groove; min-height: 500px">
+        <h2 class="center header" style="text-decoration: underline">EN ESPERA</h2>
+        <table id="espera_table" class="striped" >
+            <thead>
+            <tr>
+                <th>NOMBRE</th>
+                <th>SECTOR</th>
+{#                <th>Box</th> #}
+            </tr>
+            </thead>
+            <tbody>
+            {% for ticket in tickets %}
+                <tr id="espera_{{ ticket.id }}">
+                    <td>{{ ticket.cliente.nombre }} {{ ticket.cliente.apellido }}</td>
+                    <td>{{ ticket.sector.nombre }}</td>
+{#                    <td>{{ ticket.box.nombre }} </td> #}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col s7 m7 l7">
+        <h2 class="center header" style="text-decoration: underline">LLAMADOS</h2>
+        <table id="llamados_table" class="striped" style="resize: vertical" >
+            <thead>
+            <tr>
+                <th>NOMBRE</th>
+                <th>SECTOR</th>
+                <th>BOX</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{#<footer class="page-footer orange">#}
+{##}
+{#    <div class="footer-copyright">#}
+{#        <div class="container">#}
+{#            Made by <a class="orange-text text-lighten-3" href="http://dissoi.com">Dissoi</a>#}
+{#        </div>#}
+{#    </div>#}
+{#</footer>#}
+<!-- Modal Structure -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+	<center>
+        <h3 id="modal_sector_id">SECTOR</h3>
+
+        <p id="modal_paragraph_id" style="font-size:30px;">PERSONA_NOMBRE A SECTOR_NOMBRE</p>
+	</center>
+    </div>
+</div>
+<script src="{% static "admin/js/jquery.min.js" %}" type="text/javascript"></script>
+<script src="{% static "js/materialize.min.js" %}" type="text/javascript"></script>
+<script type="text/javascript" src="{% static 'js/colaclientes.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+{% extends 'admin/base_site.html' %}
+{% load i18n admin_urls admin_static admin_modify %}
+{% load static %}
+{% block extrahead %}{{ block.super }}
+    <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+    {{ media }}
+    <script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'admin/js/jquery.min.js' %}"></script>
+{% endblock %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
+
+{% block coltype %}colM{% endblock %}
+
+{% block title %} Box Atencion {% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+    <div id="content" class="colM">
+        <h1>Atencion de Box</h1>
+        <div id="content-main">
+            <form id="atencion-form" method="post">
+                {% csrf_token %}
+                <div>
+                    <fieldset class="module aligned ">
+                        <div class="form-row field-sector">
+                            <div>
+                                <label class="required" for="id_sector">
+                                    {{ form.sector.label }}:
+                                </label>
+
+                                {{ form.sector }}
+                            </div>
+                        </div>
+                        <div class="form-row field-box">
+                            <div>
+                                <label class="required" for="id_box">
+                                    {{ form.box.label }}:
+                                </label>
+
+                                {{ form.box }}
+                            </div>
+                        </div>
+                        <div class="form-row field-estado">
+                            <div>
+                                <label class="required" for="id_estado">
+                                    {{ form.estado.label }}:
+                                </label>
+                                {{ form.estado }}
+                            </div>
+                        </div>
+                        <div class="form-row field-cliente">
+                            <div>
+                                <label class="required" for="id_cliente">
+                                    {{ form.cliente.label }}:
+                                </label>
+                                {{ form.cliente }}
+                            </div>
+                        </div>
+                        <div class="form-row field-documento">
+                            <div>
+                                <label class="required" for="id_documento">
+                                    {{ form.documento.label }}:
+                                </label>
+                                {{ form.documento }}
+                            </div>
+                        </div>
+                        <div class="form-row field-derivar_a">
+                            <div>
+                                <label class="required" for="id_derivar_a">
+                                    {{ form.derivar_a.label }}:
+                                </label>
+                                {{ form.derivar_a }}
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="submit-row">
+                        <button class="button secundario" type="submit" id="iniciar" name="iniciar">
+                            <strong style="font-size: 20px;margin: 5px"> <i class="fa fa-hourglass-start" aria-hidden="true"></i> INICIAR </strong>
+                        </button>
+
+                        <button class="button secundario" type="submit" disabled="disabled" id="finalizar" name="finalizar">
+                            <strong style="font-size: 20px;margin: 5px"> <i class="fa fa-hourglass-end" aria-hidden="true"></i> FINALIZAR </strong>
+                        </button>
+
+                        <button class="button" style="background-color: green" type="submit" id="siguiente" name="siguiente">
+                            <strong style="font-size: 20px;margin: 5px"> <i class="fa fa-step-forward" aria-hidden="true"></i> SIGUIENTE </strong>
+                        </button>
+
+                        <button class="button delete" type="submit" id="salir" name="salir">
+                            <strong style="font-size: 20px;margin: 5px"> <i class="fa fa-sign-out" aria-hidden="true"></i> SALIR </strong>
+                        </button>
+
+
+                    </div>
+                </div>
+            </form>
+            <script type="text/javascript">
+                function load(){
+                    if($('#id_cliente').val()==''){
+                        $('#iniciar').attr('disabled', 'disabled');
+                        $('#siguiente').attr('disabled', 'disabled');
+                        $('#salir').removeAttr('disabled');
+                    }else{
+                        $('#iniciar').removeAttr('disabled');
+                        $('#siguiente').removeAttr('disabled');
+                        $('#salir').attr('disabled', 'disabled');
+                    }
+                    if($('#id_estado').val() == 'OCUPADO'){
+                        $('#iniciar').attr('disabled', 'disabled');
+                        $('#siguiente').attr('disabled', 'disabled');
+                        $('#finalizar').removeAttr('disabled');
+                        $('#salir').removeAttr('disabled');
+                    }
+
+                }
+
+                function llamar(){
+
+                    if($('#id_cliente').val()=='') {
+                        $.ajax({
+                            url: '/turno/turno/api/box_atencion_ajax/?sector=' + $('#id_sector').val() + '&box=' + $('#id_box').val() + '&documento=' + $('#id_documento').val(),
+                            type: 'get',
+                            success: function (data) {
+                                console.log(data.cliente);
+                                if (data) {
+                                    $('#id_cliente').val(data.cliente);
+                                    $('#id_documento').val(data.documento);
+                                    load()
+                                }
+                            }
+                        });
+                    }
+
+                }
+
+                $(document).ready(function () {
+                    load()
+                    setInterval(llamar, 1000);
+                })
+            </script>
+        </div>
+    </div>
+{% endblock %}
