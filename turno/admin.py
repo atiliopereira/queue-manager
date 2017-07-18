@@ -8,7 +8,7 @@ from django.utils.html import format_html
 
 from funcionario.models import Funcionario
 from turno.forms import TicketForm
-from turno.models import Sector, Box, Ticket, Atencion
+from turno.models import Sector, Box, Ticket
 
 from django.contrib import messages
 
@@ -26,7 +26,7 @@ class BoxAdmin(admin.ModelAdmin):
 
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
-    list_display = ['cliente', 'sector', 'acciones']
+    list_display = ['cliente', 'sector', 'box']
     fields = ['cliente', 'sector']
     search_fields = ['cliente__documento', 'cliente__nombre', 'cliente__apellido']
 
@@ -44,9 +44,3 @@ class TicketAdmin(admin.ModelAdmin):
             obj.creado_por = Funcionario.objects.get(usuario=request.user)
         return super(TicketAdmin, self).save_model(request, obj, form, change)
 
-
-    def acciones(self, obj):
-        return format_html(
-            '<a class="button" href="1/elegir_cliente">Atender</a>&nbsp;', args=[obj.pk])
-    acciones.short_description = 'Acciones'
-    acciones.allow_tags = True
