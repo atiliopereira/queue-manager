@@ -57,7 +57,7 @@ def login_user(request):
                         messages.error(request, 'Este usuario no tiene un funcionario asociado!')
                         return login_response(form)
 
-                    id_box = request.POST.get('box','')
+                    id_box = request.POST.get('box', '')
                     if id_box:
                         box = Box.objects.get(pk=id_box)
                         box.estado = EstadoBox.LIBRE
@@ -74,7 +74,7 @@ def login_user(request):
                     url = '/admin/'
                     sitio = request.POST['sitio']
                     if sitio == 'B':
-                        url = '/turno/box_atencion'
+                        url = '/turno/box_tickets_list'
                     if sitio == 'T':
                         url = '/admin/turno/ticket/add/'
                     return HttpResponseRedirect(url)

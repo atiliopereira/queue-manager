@@ -8,11 +8,14 @@
     <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "css/materialize.min.css" %}{% endblock %}" />
     {% block extrahead %}
 <style>
+table thead tr:first-child {
+    color: #ffa726;
+    font-weight: bolder;
+}
 td,th{
  font-size: 30px;
- font-weight: bold;
+    font-weight: bold;
 }
-
 
 </style>
 {% endblock %}
@@ -29,7 +32,7 @@ td,th{
 <div class="row"></div>
 <div class="row">
     <div class="col s5 m5 l5" style="border-right: groove; min-height: 500px">
-        <h2 class="center header" style="text-decoration: underline">EN ESPERA</h2>
+        <h2 class="center header" style="font-weight: bold; font-size: 50px; color: #70706f">EN ESPERA</h2>
         <table id="espera_table" class="striped" >
             <thead>
             <tr>
@@ -50,7 +53,7 @@ td,th{
         </table>
     </div>
     <div class="col s7 m7 l7">
-        <h2 class="center header" style="text-decoration: underline">LLAMADOS</h2>
+        <h2 class="center header" style="font-weight: bold; font-size: 50px; color: #70706f">LLAMADOS</h2>
         <table id="llamados_table" class="striped" style="resize: vertical" >
             <thead>
             <tr>
@@ -76,7 +79,7 @@ td,th{
 {#</footer>#}
 <!-- Modal Structure -->
 <div id="modal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" style="color:#70706f">
 	<center>
         <h3 id="modal_sector_id">SECTOR</h3>
 

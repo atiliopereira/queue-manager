@@ -11,7 +11,7 @@ class BoxInhabilitadoAutocomplete(autocomplete.Select2QuerySetView):
         # if not self.request.user.is_authenticated():
         #     return Box.objects.none()
 
-        qs = Box.objects.filter(estado=EstadoBox.INHABILITADO,activo=True)
+        qs = Box.objects.filter(estado=EstadoBox.INHABILITADO, activo=True)
 
         if self.q:
             qs = qs.filter(nombre__istartswith=self.q)
