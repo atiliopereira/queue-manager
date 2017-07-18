@@ -24,6 +24,15 @@
                 {% csrf_token %}
                 <div>
                     <fieldset class="module aligned ">
+                        <div class="form-row field-id">
+                            <div>
+                                <label class="required" for="id_id">
+                                    Número de ticket:
+                                </label>
+
+                                {{ ticket_id }}
+                            </div>
+                        </div>
                         <div class="form-row field-sector">
                             <div>
                                 <label class="required" for="id_sector">
@@ -80,7 +89,7 @@
                             <strong style="font-size: 20px;margin: 5px"> <i class="fa fa-hourglass-start" aria-hidden="true"></i> INICIAR </strong>
                         </button>
 
-                        <button class="button secundario" type="submit" disabled="disabled" id="finalizar" name="finalizar">
+                        <button class="button secundario" type="submit" id="finalizar" name="finalizar">
                             <strong style="font-size: 20px;margin: 5px"> <i class="fa fa-hourglass-end" aria-hidden="true"></i> FINALIZAR </strong>
                         </button>
 
@@ -113,30 +122,29 @@
                         $('#finalizar').removeAttr('disabled');
                         $('#salir').removeAttr('disabled');
                     }
-
-                }
-
-                function llamar(){
-
-                    if($('#id_cliente').val()=='') {
-                        $.ajax({
-                            url: '/turno/turno/api/box_atencion_ajax/?sector=' + $('#id_sector').val() + '&box=' + $('#id_box').val() + '&documento=' + $('#id_documento').val(),
-                            type: 'get',
-                            success: function (data) {
-                                console.log(data.cliente);
-                                if (data) {
-                                    $('#id_cliente').val(data.cliente);
-                                    $('#id_documento').val(data.documento);
-                                    load()
-                                }
-                            }
-                        });
+                    if($('#id_estado').val() == 'LIBRE'){
+                        $('#iniciar').removeAttr('disabled');
+                        $('#siguiente').removeAttr('disabled');
+                        $('#finalizar').attr('disabled', 'disabled');
+                        $('#salir').removeAttr('disabled');
                     }
 
                 }
 
+                function llamar(){
+                    $.ajax({
+                        url: '/turno/turno/api/box_atencion_ajax/?sector=' + $('#id_sector').val() + '&box=' + $('#id_box').val() + '&documento=' + $('#id_documento').val() + '&id={{ ticket_id }}',
+                        type: 'get',
+                        success: function (data) {
+                            if (data) {
+                                load()
+                            }
+                        }
+                    });
+                }
+
                 $(document).ready(function () {
-                    load()
+                    load();
                     setInterval(llamar, 1000);
                 })
             </script>
