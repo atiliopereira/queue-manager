@@ -24,6 +24,7 @@ class BoxAtencionForm(forms.Form):
     documento = forms.CharField(max_length=30, required=False)
 
     def __init__(self, *args, **kwargs):
+        ticket = kwargs.pop('ticket')
         self.request = kwargs.pop('request')
         super(BoxAtencionForm, self).__init__(*args, **kwargs)
         self.fields['sector'].widget.attrs['readonly'] = True
@@ -38,9 +39,8 @@ class BoxAtencionForm(forms.Form):
         if box:
             self.fields['box'].initial = box
             self.fields['estado'].initial = box.estado
-        ticket = Ticket.objects.filter(estado__in=[EstadoTicket.LLAMADO,EstadoTicket.ATENDIDO],
-                                       sector=self.fields['sector'].initial, box=box).first()
-
+        #ticket = Ticket.objects.filter(estado__in=[EstadoTicket.LLAMADO,EstadoTicket.ATENDIDO],
+        #                               sector=self.fields['sector'].initial, box=box).first()
         if ticket:
             self.fields['cliente'].initial = ticket.cliente
             self.fields['documento'].initial = ticket.cliente.documento
