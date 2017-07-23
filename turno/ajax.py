@@ -56,7 +56,6 @@ def box_atencion_ajax(request):
     if box and sector:
         if box.estado == EstadoBox.LIBRE:
             ticket = Ticket.objects.get(id=ticket_id)
-            print(ticket)
             if ticket and ticket.box is None:
                 if ticket.estado == EstadoTicket.PENDIENTE:
                     ticket.estado = EstadoTicket.LLAMADO

@@ -20,7 +20,7 @@ urlpatterns = [
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^admin/login/',login_user),
+    url(r'^admin/login/', login_user),
     url(r'^turno/', include('turno.urls')),
     url(r'^dissoi/', include('dissoi.urls')),
     url(r'^cliente/', include('cliente.urls'))
