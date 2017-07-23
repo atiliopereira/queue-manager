@@ -1,9 +1,9 @@
 # Create your views here.
 from django.core.urlresolvers import reverse
 from django.db import transaction
-# from django.utils import timezone
-import datetime
+from django.utils import timezone
 
+from django.db.models import Q
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 
@@ -40,7 +40,7 @@ class BoxListaTicketsView(TemplateView):
             return logout_user(request)
 
         box = Box.objects.filter(funcionario__usuario=self.request.user)[0]
-        tickets = Ticket.objects.filter(estado=EstadoTicket.PENDIENTE).filter(sector=box.sector)
+        tickets = Ticket.objects.filter(Q(estado=EstadoTicket.LLAMADO) | Q(estado=EstadoTicket.PENDIENTE)).filter(sector=box.sector)
         self.tickets = tickets
         return super(BoxListaTicketsView, self).get(request, *args, **kwargs)
 
@@ -72,7 +72,6 @@ class BoxAtencionTemplateView(FormView):
         if not sesiones.exists():
             return logout_user(request)
         self.ticket = Ticket.objects.get(id=ticket_id)
-        print('probando probando', sesiones, Box.objects.filter(funcionario__usuario=self.request.user).exists())
         return super(BoxAtencionTemplateView, self).get(request, *args, **kwargs)
 
     def derivacion(self, request, ticket):
@@ -102,7 +101,7 @@ class BoxAtencionTemplateView(FormView):
                     ticket = self.ticket
                     box.estado = EstadoBox.OCUPADO
                     ticket.estado = EstadoTicket.ATENDIDO
-                    ticket.hora_atencion = datetime.datetime.now()
+                    ticket.hora_atencion = timezone.now()
                     ticket.save()
                     box.save()
                     messages.info(request, 'Atención Iniciada.')
@@ -114,22 +113,20 @@ class BoxAtencionTemplateView(FormView):
                     ticket = self.ticket
                     box.estado = EstadoBox.LIBRE
                     ticket.estado = EstadoTicket.CERRADO
-                    ticket.hora_cierre = datetime.datetime.now()
+                    ticket.hora_cierre = timezone.now()
                     ticket.save()
-
+                    derivar_a = request.POST.get('derivar_a', '')
                     if derivar_a:
                         self.derivacion(request, ticket)
-
                     box.save()
                     messages.success(request, 'Atención Finalizada.')
         if 'salir' in request.POST:
             if cliente:
                 with transaction.atomic():
-                    cliente = cliente.get()
                     ticket = self.ticket
                     if ticket:
                         ticket.estado = EstadoTicket.CERRADO
-                        ticket.hora_cierre = datetime.datetime.now()
+                        ticket.hora_cierre = timezone.now()
                         ticket.save()
                         derivar_a = request.POST.get('derivar_a', '')
                         if derivar_a:
@@ -144,6 +141,9 @@ class BoxAtencionTemplateView(FormView):
                 if ticket:
                     ticket.estado = EstadoTicket.CANCELADO
                     ticket.save()
+                    derivar_a = request.POST.get('derivar_a', '')
+                    if derivar_a:
+                        self.derivacion(request, ticket)
                     box.estado = EstadoBox.LIBRE
                     box.save()
             messages.info(request, 'Ticket Cancelado.')
