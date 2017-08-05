@@ -14,15 +14,15 @@ class Sitio:
     BOX = 'B'
     TICKET = 'T'
 
-    CHOICES =  [
-        (ADMIN,'Administración'),
-        (BOX,'Box'),
-        (TICKET,'Tickets')
+    CHOICES = [
+        (ADMIN, 'Administración'),
+        (BOX, 'Box'),
+        (TICKET, 'Tickets')
     ]
 
 class LoginForm(AdminAuthenticationForm):
-    sitio = forms.ChoiceField(choices=Sitio.CHOICES,widget=forms.RadioSelect)
-    box = forms.ModelChoiceField(queryset=Box.objects.filter(activo=True,estado=EstadoBox.INHABILITADO),required=False,
+    sitio = forms.ChoiceField(choices=Sitio.CHOICES, widget=forms.RadioSelect)
+    box = forms.ModelChoiceField(queryset=Box.objects.filter(activo=True, estado=EstadoBox.INHABILITADO), required=False,
                                  widget=autocomplete.ModelSelect2(url='box_inhabilitado-autocomplete')
                                  )
 
@@ -31,7 +31,7 @@ class LoginForm(AdminAuthenticationForm):
 
     def clean(self):
         cleaned_data = super(LoginForm, self).clean()
-        if cleaned_data.get('sitio') == Sitio.BOX and not cleaned_data.get('box',''):
+        if cleaned_data.get('sitio') == Sitio.BOX and not cleaned_data.get('box', ''):
             raise ValidationError('Debe seleccionar un box')
         return cleaned_data
 

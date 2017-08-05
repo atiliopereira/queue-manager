@@ -40,7 +40,8 @@ class BoxListaTicketsView(TemplateView):
             return logout_user(request)
 
         box = Box.objects.filter(funcionario__usuario=self.request.user)[0]
-        tickets = Ticket.objects.filter(Q(estado=EstadoTicket.LLAMADO) | Q(estado=EstadoTicket.PENDIENTE)).filter(sector=box.sector)
+        tickets = Ticket.objects.filter(Q(estado=EstadoTicket.LLAMADO) | Q(estado=EstadoTicket.PENDIENTE)
+                                        | Q(estado=EstadoTicket.ATENDIDO)).filter(sector=box.sector)
         self.tickets = tickets
         return super(BoxListaTicketsView, self).get(request, *args, **kwargs)
 
@@ -50,7 +51,6 @@ class BoxAtencionTemplateView(FormView):
     form_class = BoxAtencionForm
     success_url = '/turno/box_tickets_list'
     ticket = None
-
 
     def get_form_kwargs(self):
         kwargs = super(BoxAtencionTemplateView, self).get_form_kwargs()
@@ -69,9 +69,11 @@ class BoxAtencionTemplateView(FormView):
         if not Box.objects.filter(funcionario__usuario=self.request.user).exists():
             return logout_user(request)
         sesiones = Sesion.objects.filter(funcionario__usuario=request.user, hora_logout__isnull=True)
+
         if not sesiones.exists():
             return logout_user(request)
         self.ticket = Ticket.objects.get(id=ticket_id)
+
         return super(BoxAtencionTemplateView, self).get(request, *args, **kwargs)
 
     def derivacion(self, request, ticket):
@@ -94,6 +96,7 @@ class BoxAtencionTemplateView(FormView):
         derivar_a = request.POST.get('derivar_a', '')
         cliente = Cliente.objects.filter(documento=documento)
         self.ticket = Ticket.objects.get(id=ticket_id)
+
         if 'iniciar' in request.POST:
             if cliente:
                 with transaction.atomic():
@@ -106,6 +109,7 @@ class BoxAtencionTemplateView(FormView):
                     box.save()
                     messages.info(request, 'Atención Iniciada.')
                     self.success_url = '/turno/box_atencion/'+str(self.ticket.id)
+
         if 'finalizar' in request.POST:
             if cliente:
                 with transaction.atomic():
@@ -120,6 +124,7 @@ class BoxAtencionTemplateView(FormView):
                         self.derivacion(request, ticket)
                     box.save()
                     messages.success(request, 'Atención Finalizada.')
+
         if 'salir' in request.POST:
             if cliente:
                 with transaction.atomic():
@@ -135,6 +140,7 @@ class BoxAtencionTemplateView(FormView):
             box.save()
             messages.info(request, 'Sesión Terminada')
             self.success_url = reverse('dissoi_logout')
+
         if 'siguiente' in request.POST:
             with transaction.atomic():
                 ticket = self.ticket
