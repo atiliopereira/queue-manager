@@ -98,6 +98,7 @@ class BoxAtencionTemplateView(FormView):
                     box.estado = EstadoBox.OCUPADO
                     ticket.estado = EstadoTicket.ATENDIDO
                     ticket.hora_atencion = timezone.now()
+                    ticket.box = box
                     ticket.save()
                     box.save()
                     messages.info(request, 'Atención Iniciada.')
