@@ -24,7 +24,6 @@ def logout_user(request):
         box = Box.objects.filter(funcionario__usuario=user)
         if box.exists():
             box = box.first()
-            box.funcionario = None
             box.estado = EstadoBox.INHABILITADO
             box.save()
 
