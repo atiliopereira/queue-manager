@@ -32,7 +32,7 @@ class LoginForm(AdminAuthenticationForm):
     def clean(self):
         cleaned_data = super(LoginForm, self).clean()
         if cleaned_data.get('sitio') == Sitio.BOX and not cleaned_data.get('box', ''):
-            raise ValidationError('Debe seleccionar un box')
+            raise ValidationError('Debe tener asignado un box, comuniquese con administración para se le asigne uno')
         return cleaned_data
 
 
