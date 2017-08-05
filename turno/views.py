@@ -35,10 +35,6 @@ class BoxListaTicketsView(TemplateView):
         if not Box.objects.filter(funcionario__usuario=self.request.user).exists():
             return logout_user(request)
 
-        sesiones = Sesion.objects.filter(funcionario__usuario=request.user, hora_logout__isnull=True)
-        if not sesiones.exists():
-            return logout_user(request)
-
         box = Box.objects.filter(funcionario__usuario=self.request.user)[0]
         tickets = Ticket.objects.filter(Q(estado=EstadoTicket.LLAMADO) | Q(estado=EstadoTicket.PENDIENTE)
                                         | Q(estado=EstadoTicket.ATENDIDO)).filter(sector=box.sector)
@@ -68,10 +64,7 @@ class BoxAtencionTemplateView(FormView):
     def get(self, request, ticket_id, *args, **kwargs):
         if not Box.objects.filter(funcionario__usuario=self.request.user).exists():
             return logout_user(request)
-        sesiones = Sesion.objects.filter(funcionario__usuario=request.user, hora_logout__isnull=True)
 
-        if not sesiones.exists():
-            return logout_user(request)
         self.ticket = Ticket.objects.get(id=ticket_id)
 
         return super(BoxAtencionTemplateView, self).get(request, *args, **kwargs)

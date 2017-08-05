@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -29,7 +31,7 @@ def logout_user(request):
     sesiones = Sesion.objects.filter(funcionario__usuario=request.user, hora_logout__isnull=True)
     if sesiones.exists():
         sesion = sesiones.first()
-        sesion.hora_logout = timezone.now()
+        sesion.hora_logout = datetime.datetime.now()
         sesion.save()
 
     return HttpResponseRedirect(reverse('dissoi_login'))
