@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -14,17 +14,16 @@ from dissoi.models import Sesion
 from funcionario.models import Funcionario
 from turno.constants import EstadoBox
 from turno.models import Box
-import datetime
+from time import timezone
 
 def logout_user(request):
-    user_id = request.GET.get('id_usuario','')
+    user_id = request.GET.get('id_usuario', '')
     user = User.objects.get(pk=user_id) if user_id else request.user
 
     if user.is_authenticated():
         box = Box.objects.filter(funcionario__usuario=user)
         if box.exists():
             box = box.first()
-            box.funcionario = None
             box.estado = EstadoBox.INHABILITADO
             box.save()
 
@@ -43,6 +42,7 @@ def login_user(request):
                            {'form': form},
                            context_instance=RequestContext(request))
     logout(request)
+
     if request.POST:
         form = LoginForm(data=request.POST)
         username = request.POST['username']
@@ -67,7 +67,7 @@ def login_user(request):
                     login(request, user)
 
                     if not Sesion.objects.filter(funcionario=funcionario, hora_logout__isnull=True).exists() and not user.is_superuser:
-                        # messages.warning(request, 'Este usuario ya se encuentra logueado!')
+                        #messages.warning(request, 'Este usuario ya se encuentra logueado!')
                         # return login_response(form)
                         Sesion.objects.create(funcionario=funcionario.first())
 

@@ -20,8 +20,8 @@ class SectorAdmin(admin.ModelAdmin):
 
 @admin.register(Box)
 class BoxAdmin(admin.ModelAdmin):
-    list_display = ['nombre', 'funcionario', 'estado', 'activo']
-    exclude = ['funcionario']
+    list_display = ['nombre', 'sector', 'estado', 'funcionario']
+    fields = ['nombre', 'funcionario', 'estado', 'sector', 'activo']
 
 
 @admin.register(Ticket)
