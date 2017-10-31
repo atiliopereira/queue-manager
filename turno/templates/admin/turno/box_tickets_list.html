@@ -25,6 +25,7 @@
                     <thead>
                         <tr>
                             <th>Cliente</th>
+                            <th>Producto</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -33,6 +34,7 @@
                         {% for ticket in tickets %}
                         <tr>
                             <td>{{ ticket.cliente }}</td>
+                            <td>{{ ticket.producto }}</td>
                             <td><button type="button" onclick="location.href='/turno/box_atencion/{{ ticket.id }}';
                                     " title="Elegir cliente">Seleccionar</button></td>
                         </tr>

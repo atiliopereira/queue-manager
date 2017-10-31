@@ -37,7 +37,7 @@ class BoxListaTicketsView(TemplateView):
 
         box = Box.objects.filter(funcionario__usuario=self.request.user)[0]
         tickets = Ticket.objects.filter(Q(estado=EstadoTicket.LLAMADO) | Q(estado=EstadoTicket.PENDIENTE)
-                                        | Q(estado=EstadoTicket.ATENDIDO)).filter(sector=box.sector)
+                                        | Q(estado=EstadoTicket.ATENDIDO)).filter(sector=box.sector).order_by('producto')
         self.tickets = tickets
         return super(BoxListaTicketsView, self).get(request, *args, **kwargs)
 

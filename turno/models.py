@@ -47,11 +47,23 @@ class Atencion(Box):
         verbose_name = 'Atención'
 
 
+class Producto(models.Model):
+    class Meta:
+        verbose_name_plural = 'Productos'
+
+    descripcion = models.CharField(max_length=50)
+    codigo = models.CharField(max_length=20, blank=True)
+
+    def __str__(self):
+        return self.descripcion
+
+
 class Ticket(models.Model):
     fecha = models.DateField(default=timezone_today, blank=True)
     hora = models.TimeField(default=datetime.datetime.now, blank=True)
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT, related_name='cliente')
     sector = models.ForeignKey(Sector, on_delete=models.PROTECT, related_name='ticket_sector')
+    producto = models.ForeignKey(Producto, on_delete=models.PROTECT, null=True, related_name='producto')
     box = models.ForeignKey('Box', on_delete=models.PROTECT, related_name='ticket_box', null=True, blank=True)
     estado = models.CharField(choices=EstadoTicket.LISTA_ESTADOS, max_length=15, default=EstadoTicket.PENDIENTE,
                               blank=True)
