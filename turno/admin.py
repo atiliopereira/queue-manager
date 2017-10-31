@@ -8,7 +8,7 @@ from django.utils.html import format_html
 
 from funcionario.models import Funcionario
 from turno.forms import TicketForm
-from turno.models import Sector, Box, Ticket
+from turno.models import Sector, Box, Ticket, Producto
 
 from django.contrib import messages
 
@@ -24,10 +24,15 @@ class BoxAdmin(admin.ModelAdmin):
     fields = ['nombre', 'funcionario', 'estado', 'sector', 'activo']
 
 
+@admin.register(Producto)
+class ProductoAdmin(admin.ModelAdmin):
+    pass
+
+
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
-    list_display = ['cliente', 'sector', 'box']
-    fields = ['cliente', 'sector']
+    list_display = ['cliente', 'producto', 'sector', 'box']
+    fields = ['cliente', 'producto', 'sector']
     search_fields = ['cliente__documento', 'cliente__nombre', 'cliente__apellido']
 
     form = TicketForm
