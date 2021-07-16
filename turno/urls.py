@@ -8,7 +8,7 @@ from turno.views import ColaClienteSideTemplateView, BoxAtencionTemplateView, \
 
 urlpatterns = [
     # Examples:
-    # url(r'^$', 'credicentro.views.home', name='home'),
+    # url(r'^$', 'queue.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
     url(r'^colacliente/', ColaClienteSideTemplateView.as_view(), name='cola_cliente'),
     url(r'^box_atencion/(?P<ticket_id>\d+)/$', login_required(BoxAtencionTemplateView.as_view()), name='box_atencion'),

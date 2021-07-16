@@ -13,7 +13,7 @@ from django.utils import six
 from django.views.decorators.cache import never_cache
 
 class MyAdminSite(AdminSite):
-    site_header = 'CrediCentro'
+    site_header = 'queue'
 
     @never_cache
     def index(self, request, extra_context=None):

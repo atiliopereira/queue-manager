@@ -1,7 +1,7 @@
 import csv
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-os.environ['DJANGO_SETTINGS_MODULE'] = 'credicentro.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'queue.settings'
 import django
 django.setup()
 from cliente.models import Cliente
